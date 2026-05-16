@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Info Viewer</title>
+
+<style>
+    body {
+        background: #111;
+        color: white;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding-top: 80px;
+    }
+
+    .box {
+        background: #1c1c1c;
+        width: 500px;
+        max-width: 90%;
+        margin: auto;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(255,255,255,0.1);
+    }
+
+    a {
+        color: #4da6ff;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    #tips {
+        margin-top: 20px;
+        display: none;
+        text-align: left;
+        background: #222;
+        padding: 15px;
+        border-radius: 10px;
+    }
+</style>
+</head>
+<body>
+
+<div class="box">
+    <h1 id="info">Loading...</h1>
+
+    <p>
+        <a onclick="showTips()">How to protect your information</a>
+    </p>
+
+    <div id="tips">
+        <h3>Protect Your Information</h3>
+        <ul>
+            <li>Do not share passwords.</li>
+            <li>Use strong passwords.</li>
+            <li>Enable 2FA.</li>
+            <li>Avoid suspicious links.</li>
+            <li>Keep devices updated.</li>
+            <li>Don’t download random files.</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+async function loadInfo() {
+    try {
+        const res = await fetch("https://ipapi.co/json/");
+        const data = await res.json();
+
+        let device = "PC User";
+        const ua = navigator.userAgent;
+
+        if (ua.includes("Windows")) device = "Windows User";
+        else if (ua.includes("Mac")) device = "Mac User";
+        else if (ua.includes("Linux")) device = "Linux User";
+
+        document.getElementById("info").innerText =
+            `Hello ${device}, your public IP is ${data.ip} and you live in ${data.country_name}, ${data.city}`;
+    } catch (e) {
+        document.getElementById("info").innerText =
+            "Could not load info.";
+    }
+}
+
+function showTips() {
+    const tips = document.getElementById("tips");
+    tips.style.display = tips.style.display === "block" ? "none" : "block";
+}
+
+loadInfo();
+</script>
+
+</body>
+</html>
